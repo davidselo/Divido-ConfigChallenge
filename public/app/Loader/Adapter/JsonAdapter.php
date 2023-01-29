@@ -9,7 +9,6 @@ class JsonAdapter implements LoaderAdapterInterface
 
     public function loadConfig(string $file): array
     {
-        var_dump(__METHOD__);
         // TODO: Implement loadConfig() method.
     }
 
