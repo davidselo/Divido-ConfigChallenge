@@ -14,3 +14,7 @@ docker-compose run phpunit
 ```
 
 ### Run project.
+
+```
+docker-compose run php
+```
