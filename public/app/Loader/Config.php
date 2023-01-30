@@ -22,6 +22,12 @@ class Config
         'json' => 'Loader\Adapter\JsonAdapter'
     ];
 
+    public function __construct(string $configType)
+    {
+        // @todo: error handling on no adapter found.
+        $this->_adapter = new $this->_adaptersMap[$configType]();
+    }
+
     /**
      * @return array
      */
@@ -33,13 +39,6 @@ class Config
     public function getAdapter(): LoaderAdapterInterface
     {
         return $this->_adapter;
-    }
-
-    public function __construct(string $configType)
-    {
-
-        // @todo: error handling on no adapter found.
-        $this->_adapter = new JsonAdapter();
     }
 
 }
