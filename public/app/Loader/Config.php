@@ -11,7 +11,7 @@ class Config
     /**
      * @var array
      */
-    private $_config;
+    private $_config = [];
 
     /**
      * @var LoaderAdapterInterface
@@ -24,13 +24,10 @@ class Config
 
     public function __construct(string $configType)
     {
-        // @todo: error handling on no adapter found.
         $this->_adapter = new $this->_adaptersMap[$configType]();
     }
 
-    /**
-     * @return array
-     */
+
     public function getConfig(): array
     {
         return $this->_config;

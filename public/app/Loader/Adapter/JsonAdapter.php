@@ -35,7 +35,7 @@ class JsonAdapter implements LoaderAdapterInterface
     public function loadConfig(string $configData): array
     {
         // 1. Check file exists.
-        $fileContent = file_get_contents( ".". DS . $this->_configPath . DS . $configData);
+        $fileContent = file_get_contents("." . DS . $this->_configPath . DS . $configData);
         if (!$fileContent) {
             throw new Exception("An error has occurred on config retrieval");
         }
