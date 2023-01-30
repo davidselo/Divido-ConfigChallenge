@@ -1,0 +1,20 @@
+version: '3'
+services:
+  composer:
+    image: composer:2.5.1
+    environment:
+      - COMPOSER_CACHE_DIR=/app/var/cache/composer
+    volumes:
+      - ./public:/app
+  php:
+    build: ./Docker/PHP
+    restart: "no"
+    volumes:
+      - ./public:/usr/src/myapp
+  phpunit:
+    image: php:7.4-cli
+    restart: "no"
+    volumes:
+      - ./public:/usr/src/myapp
+    working_dir: /usr/src/myapp
+    entrypoint: vendor/bin/phpunit
