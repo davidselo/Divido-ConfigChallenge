@@ -13,25 +13,25 @@ interface LoaderAdapterInterface
 
     /**
      * Get config form a file and create an object with the configuration.
-     * @param string $configData
+     * @param string $configFileName
      * @return array
      */
-    public function loadConfig(string $configData): array;
+    public function loadConfig(string $configFileName): ?array;
 
     /**
      * Takes Original Config and overwrite config and merge in one config array.
      * @param array $configData
-     * @param string $configOverwrite
+     * @param string $configFileName
      * @return array
      */
-    public function overwriteConfig(array $configData, string $configOverwrite): array;
+    public function overwriteConfig(array $configData, string $configFileName): array;
 
     /**
      * Validate config file have the right format.
-     * @param string $configData
+     * @param string $configRawData
      * @return boolean
      */
-    public function validate(string $configData): bool;
+    public function validate(string $configRawData): bool;
 
 
 }

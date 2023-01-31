@@ -23,15 +23,15 @@ class JsonAdapter implements LoaderAdapterInterface
 
     /**
      * @param array $configData
-     * @param string $configOverwrite
+     * @param string $configFileName
      * @return array
      * @throws Exception
      */
-    public function overwriteConfig(array $configData, string $configOverwrite): array
+    public function overwriteConfig(array $configData, string $configFileName): array
     {
         // We assume $configData is already retrieved with loadConfig, therefore is a valid config file.
         // 1. Load overwrite config.
-        $overwriteConfigArray = $this->loadConfig($configOverwrite);
+        $overwriteConfigArray = $this->loadConfig($configFileName);
 
         // 2. merge array and return new config.
 
@@ -39,14 +39,14 @@ class JsonAdapter implements LoaderAdapterInterface
     }
 
     /**
-     * @param string $configData
+     * @param string $configFileName
      * @return array
      * @throws Exception
      */
-    public function loadConfig(string $configData): array
+    public function loadConfig(string $configFileName): ?array
     {
         // 1. Check file exists.
-        $fileContent = file_get_contents("." . DS . $this->_configPath . DS . $configData);
+        $fileContent = file_get_contents("." . DS . $this->_configPath . DS . $configFileName);
         if (!$fileContent) {
             throw new Exception("An error has occurred on config retrieval");
         }
@@ -59,13 +59,13 @@ class JsonAdapter implements LoaderAdapterInterface
     }
 
     /**
-     * @param string $configData
+     * @param string $configRawData
      * @return bool
      * @throws Exception
      */
-    public function validate(string $configData): bool
+    public function validate(string $configRawData): bool
     {
-        $configArray = json_decode($configData, true);
+        $configArray = json_decode($configRawData, true);
         if (!$configArray) {
             throw new Exception("Invalid Json File");
         }
