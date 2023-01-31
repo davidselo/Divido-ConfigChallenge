@@ -38,4 +38,9 @@ class Config
         return $this->_adapter;
     }
 
+    public function loadConfigFiles( array $configHandlers){
+        // 1. Load all the files in an array and merge them in one array.
+        // 2. Add config array to $_config variable.
+    }
+
 }

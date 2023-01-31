@@ -17,7 +17,7 @@ class ConfigTest extends TestCase
     /**
      * @covers Loader\Config::__construct()
      */
-    public function testClassConstructor()
+    public function testClassConstruct()
     {
         // Arrange
         $configMock = new Config('json');

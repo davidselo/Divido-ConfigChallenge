@@ -7,8 +7,19 @@ use Loader\Adapter\LoaderInterface;
 
 class JsonAdapter implements LoaderAdapterInterface
 {
+    /**
+     * @var string
+     */
+    private $_configPath;
 
-    private $_configPath = 'app/data/static';
+    /**
+     * JsonAdapter constructor.
+     * @param string $configPath
+     */
+    public function __construct(string $configPath = 'app/data/static')
+    {
+        $this->_configPath = $configPath;
+    }
 
     /**
      * @param array $configData
