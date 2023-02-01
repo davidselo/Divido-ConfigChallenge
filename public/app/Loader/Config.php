@@ -11,7 +11,7 @@ class Config
     /**
      * @var array
      */
-    private $_config = [];
+    private $_globalConfig = [];
 
     /**
      * @var LoaderAdapterInterface
@@ -27,10 +27,43 @@ class Config
         $this->_adapter = new $this->_adaptersMap[$configType]();
     }
 
-
-    public function getConfig(): array
+    public function loadConfigFiles(array $configHandlers): void
     {
-        return $this->_config;
+        // 1. Load all the files in an array and merge them in one array.
+        $result = array_reduce(
+            $configHandlers,
+            function ($carry, $item) {
+                $carry = $this->arrayMergeDeep([$carry, $this->getAdapter()->loadConfig($item)]);
+                return $carry;
+            },
+            $this->getConfig()
+        );
+        // 2. Add config array to $_globalConfig variable.
+        $this->setConfig($result);
+    }
+
+    private function arrayMergeDeep($arrays): array
+    {
+        $result = [];
+        foreach ($arrays as $array) {
+            foreach ($array as $key => $value) {
+                if (is_integer($key)) {
+                    $result[] = $value;
+                } elseif (isset($result[$key]) &&
+                    is_array($result[$key]) &&
+                    is_array($value)) {
+                    $result[$key] = $this->arrayMergeDeep(
+                        [
+                            $result[$key],
+                            $value,
+                        ]
+                    );
+                } else {
+                    $result[$key] = $value;
+                }
+            }
+        }
+        return $result;
     }
 
     public function getAdapter(): LoaderAdapterInterface
@@ -38,9 +71,14 @@ class Config
         return $this->_adapter;
     }
 
-    public function loadConfigFiles( array $configHandlers){
-        // 1. Load all the files in an array and merge them in one array.
-        // 2. Add config array to $_config variable.
+    public function getConfig(): array
+    {
+        return $this->_globalConfig;
+    }
+
+    public function setConfig(array $config): array
+    {
+        return $this->_globalConfig = $config;
     }
 
 }

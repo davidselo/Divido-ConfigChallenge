@@ -1,0 +1,8 @@
+{
+  "payments": {
+    "clearpay": {
+      "user": "User1",
+      "APIKey": "divido"
+    }
+  }
+}

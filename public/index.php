@@ -11,9 +11,11 @@ use Loader\Config;
 $_configType = 'json';
 $config = new Config($_configType);
 try {
-    $baseConfig = $config->getAdapter()->loadConfig("config.json");
-    $overwriteConfig = $config->getAdapter()->overwriteConfig($baseConfig, "config.local.json");
-    var_dump($baseConfig);
+    $baseConfig = $config->loadConfigFiles(
+        ['config.json', 'config.local.json', 'config.payments.json', 'config.payments.klarna.json']
+    );
+
+    var_dump($config->getConfig());
     exit;
 } catch (Exception $e) {
     var_dump($e->getMessage());
