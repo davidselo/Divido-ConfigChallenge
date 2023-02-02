@@ -28,6 +28,9 @@ class Config
         $this->_adapter = new $this->_adaptersMap[$configType]();
     }
 
+    /**
+     * @param array $configHandlers
+     */
     public function loadConfigFiles(array $configHandlers): void
     {
         // 1. Load all the files in an array and merge them in one array.
@@ -43,6 +46,11 @@ class Config
         $this->setConfig($result);
     }
 
+    /**
+     * Method to merge and overwrite configuration values on the global config array.
+     * @param $arrays
+     * @return array
+     */
     private function arrayMergeDeep($arrays): array
     {
         $result = [];
@@ -83,8 +91,9 @@ class Config
     }
 
     /**
-     * @param string $configValue
+     * @param string $configParameter
      * @return array | string
+     * @throws Exception
      */
     public function get(string $configParameter)
     {
@@ -93,9 +102,8 @@ class Config
             throw new Exception('Wrong parameter format.');
         }
 
-        // 2. Split string by.
+        // 2. Split string by "."
         $parameterChain = explode('.', $configParameter);
-
 
         // 3. Retrieve parameter value from $_globalConfig variable.
         // Note: Retrieve variable value if is a string or Array if there are more nesting configurations.
@@ -104,7 +112,9 @@ class Config
 
     private function validateConfigParameter(string $parameter): bool
     {
-        return true;
+        $matches = [];
+        $regex = '/^([A-Za-z0-9]+)(\.[A-Za-z0-9]+)*$/';
+        return preg_match($regex, $parameter, $matches);
     }
 
     /**
