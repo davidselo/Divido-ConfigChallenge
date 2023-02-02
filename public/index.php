@@ -15,6 +15,13 @@ try {
         ['config.json', 'config.local.json', 'config.payments.json', 'config.payments.klarna.json']
     );
 
+    //$value = $config->get('environment');
+    $value = $config->get('database.host');
+    $value = $config->get('database');
+    $value = $config->get('payments');
+
+    var_dump($value);exit;
+
     var_dump($config->getConfig());
     exit;
 } catch (Exception $e) {

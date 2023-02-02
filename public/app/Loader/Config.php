@@ -5,6 +5,7 @@ namespace Loader;
 
 use Loader\Adapter\JsonAdapter;
 use Loader\Adapter\LoaderAdapterInterface;
+use Exception;
 
 class Config
 {
@@ -79,6 +80,50 @@ class Config
     public function setConfig(array $config): array
     {
         return $this->_globalConfig = $config;
+    }
+
+    /**
+     * @param string $configValue
+     * @return array | string
+     */
+    public function get(string $configParameter)
+    {
+        // 1. Validate $configParameter
+        if (!$this->validateConfigParameter($configParameter)) {
+            throw new Exception('Wrong parameter format.');
+        }
+
+        // 2. Split string by.
+        $parameterChain = explode('.', $configParameter);
+
+
+        // 3. Retrieve parameter value from $_globalConfig variable.
+        // Note: Retrieve variable value if is a string or Array if there are more nesting configurations.
+        return $this->recursiveArrayRetrieval($parameterChain, $this->getConfig());
+    }
+
+    private function validateConfigParameter(string $parameter): bool
+    {
+        return true;
+    }
+
+    private function recursiveArrayRetrieval(array $configValue, array $configArray)
+    {
+        // 1. Arrange parameter to access to values.
+        $reverseArray = array_reverse($configValue);
+        $configArraykey = array_pop($reverseArray);
+
+        // 1. breakpoint recursion
+        if (count($configValue) == 1 &&
+            array_key_exists($configArraykey, $configArray)
+        ) {
+            return $configArray[$configArraykey];
+        }
+
+        // 2. Case we still have to go deep on the array.
+        // @todo: check when doesn't exists the configuration value.
+        array_shift($configValue);
+        return $this->recursiveArrayRetrieval($configValue, $configArray[$configArraykey]);
     }
 
 }
