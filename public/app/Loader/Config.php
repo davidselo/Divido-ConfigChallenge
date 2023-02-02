@@ -95,53 +95,53 @@ class Config
      * @return array | string
      * @throws Exception
      */
-    public function get(string $configParameter)
+    public function get(string $configParameterKey)
     {
         // 1. Validate $configParameter
-        if (!$this->validateConfigParameter($configParameter)) {
+        if (!$this->validateConfigParameterKey($configParameterKey)) {
             throw new Exception('Wrong parameter format.');
         }
 
         // 2. Split string by "."
-        $parameterChain = explode('.', $configParameter);
+        $parameterChain = explode('.', $configParameterKey);
 
         // 3. Retrieve parameter value from $_globalConfig variable.
         // Note: Retrieve variable value if is a string or Array if there are more nesting configurations.
         return $this->recursiveArrayRetrieval($parameterChain, $this->getConfig());
     }
 
-    private function validateConfigParameter(string $parameter): bool
+    private function validateConfigParameterKey(string $parameterKey): bool
     {
         $matches = [];
         $regex = '/^([A-Za-z0-9]+)(\.[A-Za-z0-9]+)*$/';
-        return preg_match($regex, $parameter, $matches);
+        return preg_match($regex, $parameterKey, $matches);
     }
 
     /**
-     * @param array $configValue
+     * @param array $configValueKey
      * @param array $configArray
      * @return array | string | null
      */
-    private function recursiveArrayRetrieval(array $configValue, array $configArray)
+    private function recursiveArrayRetrieval(array $configValueKey, array $configArray)
     {
         // 1. Arrange parameter to access to values.
-        $reverseArray = array_reverse($configValue);
-        $configArraykey = array_pop($reverseArray);
+        $reverseArray = array_reverse($configValueKey);
+        $configItemKey = array_pop($reverseArray);
 
         // 1. breakpoint recursion
-        if (count($configValue) == 1 &&
-            array_key_exists($configArraykey, $configArray)
+        if (count($configValueKey) == 1 &&
+            array_key_exists($configItemKey, $configArray)
         ) {
-            return $configArray[$configArraykey];
+            return $configArray[$configItemKey];
         }
 
         // 2. Case we still have to go deep on the array.
         // 2.1 unhappy path where the config value doesn't exists.
-        if(!array_key_exists($configArraykey, $configArray)) return null;
+        if(!array_key_exists($configItemKey, $configArray)) return null;
 
         // 2.2 happy path: the key exist on the config Array.
-        array_shift($configValue);
-        return $this->recursiveArrayRetrieval($configValue, $configArray[$configArraykey]);
+        array_shift($configValueKey);
+        return $this->recursiveArrayRetrieval($configValueKey, $configArray[$configItemKey]);
     }
 
 }
