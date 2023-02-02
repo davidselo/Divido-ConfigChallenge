@@ -15,7 +15,7 @@ try {
         ['config.json', 'config.local.json', 'config.payments.json', 'config.payments.klarna.json']
     );
 
-    var_dump($config->get('cache.redis.host'));
+    var_dump($config->get('cache.redis.port'));
 
 } catch (Exception $e) {
     var_dump("Exception: ". $e->getMessage() );
