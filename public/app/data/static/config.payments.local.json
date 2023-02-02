@@ -1,0 +1,8 @@
+{
+  "payments": {
+    "clearpay": {
+      "user": "UserLocal",
+      "APIKey": "dividoLocal"
+    }
+  }
+}
