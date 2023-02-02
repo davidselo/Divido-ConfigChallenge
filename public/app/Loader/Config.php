@@ -107,6 +107,11 @@ class Config
         return true;
     }
 
+    /**
+     * @param array $configValue
+     * @param array $configArray
+     * @return array | string | null
+     */
     private function recursiveArrayRetrieval(array $configValue, array $configArray)
     {
         // 1. Arrange parameter to access to values.
@@ -121,7 +126,10 @@ class Config
         }
 
         // 2. Case we still have to go deep on the array.
-        // @todo: check when doesn't exists the configuration value.
+        // 2.1 unhappy path where the config value doesn't exists.
+        if(!array_key_exists($configArraykey, $configArray)) return null;
+
+        // 2.2 happy path: the key exist on the config Array.
         array_shift($configValue);
         return $this->recursiveArrayRetrieval($configValue, $configArray[$configArraykey]);
     }
