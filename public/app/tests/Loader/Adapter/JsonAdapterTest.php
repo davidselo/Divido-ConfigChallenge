@@ -17,22 +17,6 @@ class JsonAdapterTest extends TestCase
     const CONFIG_FILE_FAILURE_FIXTURE = 'config.invalid.json';
 
     /**
-     * @covers Loader\Adapter\LoaderInterface::overwriteConfig()
-     */
-    public function testOverwriteConfig(): void
-    {
-        // Arrange
-        $configDataArrayMock = ['environment' => 'staging'];
-        $jsonAdapterMock = new JsonAdapter(self::FIXTURES_FOLDER);
-
-        // Act
-        $result = $jsonAdapterMock->overwriteConfig($configDataArrayMock, self::CONFIG_FILE_SUCCESS_FIXTURE);
-
-        // Assert
-        $this->assertEquals($result['environment'], 'production');
-    }
-
-    /**
      * @covers Loader\Adapter\LoaderInterface::__construct()
      */
     public function testJsonAdapterConstruct()

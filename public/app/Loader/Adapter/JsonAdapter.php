@@ -3,7 +3,6 @@
 namespace Loader\Adapter;
 
 use Exception;
-use Loader\Adapter\LoaderInterface;
 
 class JsonAdapter implements LoaderAdapterInterface
 {
@@ -19,23 +18,6 @@ class JsonAdapter implements LoaderAdapterInterface
     public function __construct(string $configPath = 'app/data/static')
     {
         $this->_configPath = $configPath;
-    }
-
-    /**
-     * @param array $configData
-     * @param string $configFileName
-     * @return array
-     * @throws Exception
-     */
-    public function overwriteConfig(array $configData, string $configFileName): array
-    {
-        // We assume $configData is already retrieved with loadConfig, therefore is a valid config file.
-        // 1. Load overwrite config.
-        $overwriteConfigArray = $this->loadConfig($configFileName);
-
-        // 2. merge array and return new config.
-
-        return array_merge($configData, $overwriteConfigArray);
     }
 
     /**

@@ -29,13 +29,13 @@ class Config
     }
 
     /**
-     * @param array $configHandlers
+     * @param array $configs
      */
-    public function loadConfigFiles(array $configHandlers): void
+    public function loadConfigFiles(array $configs): void
     {
         // 1. Load all the files in an array and merge them in one array.
         $result = array_reduce(
-            $configHandlers,
+            $configs,
             function ($carry, $item) {
                 $carry = $this->arrayMergeDeep([$carry, $this->getAdapter()->loadConfig($item)]);
                 return $carry;
@@ -91,7 +91,7 @@ class Config
     }
 
     /**
-     * @param string $configParameter
+     * @param string $configParameterKey
      * @return array | string
      * @throws Exception
      */
@@ -106,7 +106,7 @@ class Config
         $parameterChain = explode('.', $configParameterKey);
 
         // 3. Retrieve parameter value from $_globalConfig variable.
-        // Note: Retrieve variable value if is a string or Array if there are more nesting configurations.
+        // Note: Retrieve variable value if it's a string or Array if there are more nesting configurations.
         return $this->recursiveArrayRetrieval($parameterChain, $this->getConfig());
     }
 
@@ -136,7 +136,7 @@ class Config
         }
 
         // 2. Case we still have to go deep on the array.
-        // 2.1 unhappy path where the config value doesn't exists.
+        // 2.1 unhappy path where the config value doesn't exist.
         if(!array_key_exists($configItemKey, $configArray)) return null;
 
         // 2.2 happy path: the key exist on the config Array.

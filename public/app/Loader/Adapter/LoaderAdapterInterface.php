@@ -19,14 +19,6 @@ interface LoaderAdapterInterface
     public function loadConfig(string $configFileName): ?array;
 
     /**
-     * Takes Original Config and overwrite config and merge in one config array.
-     * @param array $configData
-     * @param string $configFileName
-     * @return array
-     */
-    public function overwriteConfig(array $configData, string $configFileName): array;
-
-    /**
      * Validate config file have the right format.
      * @param string $configRawData
      * @return boolean
