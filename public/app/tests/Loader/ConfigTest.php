@@ -10,6 +10,7 @@ use Loader\Config;
 use Loader\Adapter\JsonAdapter;
 use ReflectionClass;
 use ReflectionException;
+use Exception;
 
 /**
  * Class ConfigTest
@@ -125,6 +126,119 @@ class ConfigTest extends TestCase
 
         // Assert
         $this->assertEquals('development', $configDataMock->getConfig()['environment']);
+    }
+
+    /**
+     * @covers Loader\Config::get()
+     */
+    public function testGetOnSuccess()
+    {
+        // Arrange
+        $configParameterKey = 'database.host';
+        $configDataMock = $this->getMockBuilder('\\Loader\\Config')
+            ->setConstructorArgs(array('json'))
+            ->onlyMethods(['getAdapter'])
+            ->getMock();
+        $configDataMock->expects($this->atLeastOnce())->method('getAdapter')->will(
+            $this->returnValue(new JsonAdapter(self::FIXTURES_FOLDER))
+        );
+
+        // Act
+        $configDataMock->loadConfigFiles(['config.json']);
+        $parameterValue = $configDataMock->get($configParameterKey);
+
+        // Assert
+        $this->assertEquals('mysql', $parameterValue);
+    }
+
+    /**
+     * @covers Loader\Config::get()
+     */
+    public function testGetOnFailure()
+    {
+        // Arrange
+        $configParameterKey = 'database#host';
+        $configDataMock = $this->getMockBuilder('\\Loader\\Config')
+            ->setConstructorArgs(array('json'))
+            ->onlyMethods(['getAdapter'])
+            ->getMock();
+        $configDataMock->expects($this->atLeastOnce())->method('getAdapter')->will(
+            $this->returnValue(new JsonAdapter(self::FIXTURES_FOLDER))
+        );
+
+        // Act
+        $configDataMock->loadConfigFiles(['config.json']);
+
+        // Assert
+        $this->expectException(Exception::class);
+        $configDataMock->get($configParameterKey);
+    }
+
+    /**
+     * @covers Loader\Config::validateConfigParameterKey()
+     */
+    public function testValidateConfigParameterKeyOnSuccess()
+    {
+        // Arrange
+        $parameterKeyOK = 'hola.hello';
+        $config = new Config('json');
+
+        // Act
+        $result = $this->invokeMethod($config, 'validateConfigParameterKey', [$parameterKeyOK]);
+
+        // Assert
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers Loader\Config::validateConfigParameterKey()
+     */
+    public function testValidateConfigParameterKeyOnFailure()
+    {
+        // Arrange
+        $parameterKeyOK = 'hola!hello';
+        $config = new Config('json');
+
+        // Act
+        $result = $this->invokeMethod($config, 'validateConfigParameterKey', [$parameterKeyOK]);
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @covers Loader\Config::recursiveArrayRetrieval()
+     */
+    public function testRecursiveArrayRetrievalOnSuccess()
+    {
+        // Arrange
+        $configValuesKeysArrayFixture1 = ['database', 'port'];
+        $configValuesKeysArrayFixture2 = ['database', 'host'];
+        $globalConfigArrayFixture = [
+            'database' => [
+                'host' => '127.0.0.1',
+                'port' => '1234',
+            ]
+        ];
+        $config = new Config('json');
+        $config->setConfig($globalConfigArrayFixture);
+
+        // Act
+        $resultPort = $this->invokeMethod(
+            $config,
+            'recursiveArrayRetrieval',
+            [$configValuesKeysArrayFixture1, $globalConfigArrayFixture]
+        );
+        $resultHost = $this->invokeMethod(
+            $config,
+            'recursiveArrayRetrieval',
+            [$configValuesKeysArrayFixture2, $globalConfigArrayFixture]
+        );
+
+
+        // Assert
+        $this->assertEquals("1234", $resultPort);
+        $this->assertEquals("127.0.0.1", $resultHost);
     }
 
 }
