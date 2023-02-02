@@ -13,9 +13,10 @@ before you move to the next steps.
 - Then we have to start our containers with the command `make start`
     - After you run this step you will have a PHP cli container running where you can 
     execute php scripts with different examples.
-- To run a script you can call `make run php index.php` where `php index.php` is the command we want 
-  to execute on the container
-    - i.e: `make run php overwritingConfig.php`
+- To run a script you can call `make run php script.php` where `php script.php` is the command we want 
+  to execute on the container. There are two relevant scripts in this repo:
+    - `index.php` is a simple example loading some configs and retrieving a single value.
+    - `overwritingConfig.php` is a more complex example overwriting configs and retrieving different values.
     
 ### Running Tests
 - You just need to run the next command `make tests` on the project root folder.
