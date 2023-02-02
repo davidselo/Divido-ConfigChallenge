@@ -32,6 +32,9 @@ try {
     echo "retrieving get('database.port')\n";
     $value = $config->get('database.port');
     var_dump($value);
+    echo "retrieving get('payments.clearpay') which was overwritten by another load of a config file.\n";
+    $value = $config->get('payments.clearpay');
+    var_dump($value);
     echo "\n";
     echo "=======================================================================\n";
     echo "=======================================================================\n";
