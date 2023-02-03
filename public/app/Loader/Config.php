@@ -91,6 +91,7 @@ class Config
     }
 
     /**
+     * Get config value per key provided
      * @param string $configParameterKey
      * @return array | string
      * @throws Exception
